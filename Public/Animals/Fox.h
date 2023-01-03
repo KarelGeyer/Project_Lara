@@ -4,22 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Animals/AnimalBase.h"
-#include "Wolf.generated.h"
+#include "Fox.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PROJECT_LARA_API AWolf : public AAnimalBase
+class PROJECT_LARA_API AFox : public AAnimalBase
 {
 	GENERATED_BODY()
 
 public:
-	AWolf();
+	AFox();
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	/* Base Speed */
-	float Speed = 95.f;
+	float Speed = 50.f;
 };

@@ -1,17 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Animals/Wolf.h"
+#include "Animals/Deer.h"
 
-AWolf::AWolf()
+ADeer::ADeer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AWolf::BeginPlay()
+void ADeer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void ADeer::BeginPlay()
 {
 	Super::BeginPlay();
 
 	SetMovementSpeed(Speed);
-	SetTimers(4.f);
+	SetTimers(FMath::RandRange(7.f, 15.f));
 }

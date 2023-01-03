@@ -8,44 +8,44 @@
 
 class AProject_LaraCharacter;
 
-UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECT_LARA_API UTP_WeaponComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AProject_LaraProjectile> ProjectileClass;
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<class AProject_LaraProjectile> ProjectileClass;
 
 	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	USoundBase* FireSound;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		USoundBase* FireSound;
+
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
+		UAnimMontage* FireAnimation;
 
 	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector MuzzleOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		FVector MuzzleOffset;
 
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
 
 	/** Attaches the actor to a FirstPersonCharacter */
-	UFUNCTION(BlueprintCallable, Category="Weapon")
-	void AttachWeapon(AProject_LaraCharacter* TargetCharacter);
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void AttachWeapon(AProject_LaraCharacter* TargetCharacter);
 
 	/** Make the weapon Fire a Projectile */
-	UFUNCTION(BlueprintCallable, Category="Weapon")
-	void Fire();
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void Fire();
 
 protected:
 	/** Ends gameplay for this component. */
 	UFUNCTION()
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-		
+		virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 
 private:
 	/** The Character holding this weapon*/

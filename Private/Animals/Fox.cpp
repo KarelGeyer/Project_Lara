@@ -1,17 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Animals/Wolf.h"
+#include "Animals/Fox.h"
 
-AWolf::AWolf()
+AFox::AFox()
 {
-	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AWolf::BeginPlay()
+void AFox::BeginPlay()
 {
 	Super::BeginPlay();
 
 	SetMovementSpeed(Speed);
-	SetTimers(4.f);
 }

@@ -13,11 +13,7 @@ AAnimalBase::AAnimalBase()
 void AAnimalBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FTimerHandle IdleTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(IdleTimerHandle, this, &AAnimalBase::SetIdleAnimationState, 2.f, true);
 }
-
 
 void AAnimalBase::Tick(float DeltaTime)
 {
@@ -40,7 +36,6 @@ void AAnimalBase::SetMovementSpeed(float Speed)
 void AAnimalBase::ManageAnim()
 {
 	if (IsMoving()) {
-		UE_LOG(LogTemp, Warning, TEXT("Moving"));
 		MovementAnimationSpeed = 0.5f;
 
 		return;
@@ -51,9 +46,13 @@ void AAnimalBase::ManageAnim()
 
 void AAnimalBase::SetIdleAnimationState()
 {
-	if (!IsMoving()) {
-		IdleAnimationState = FMath::RandRange(0.f, 1.f);
-	}
+	IdleAnimationState = FMath::RandRange(0.f, 1.f);
+}
+
+void AAnimalBase::SetTimers(int IdleStateChangeRate)
+{
+	FTimerHandle IdleTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(IdleTimerHandle, this, &AAnimalBase::SetIdleAnimationState, IdleStateChangeRate, true);
 }
 
 bool AAnimalBase::IsMoving()

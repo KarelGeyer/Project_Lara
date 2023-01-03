@@ -1,17 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Animals/Wolf.h"
+#include "Animals/Pig.h"
 
-AWolf::AWolf()
+APig::APig()
 {
-	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AWolf::BeginPlay()
+void APig::BeginPlay()
 {
 	Super::BeginPlay();
 
 	SetMovementSpeed(Speed);
-	SetTimers(4.f);
+	SetTimers(2.f);
 }

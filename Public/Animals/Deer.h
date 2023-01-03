@@ -4,18 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Animals/AnimalBase.h"
-#include "Wolf.generated.h"
+#include "Deer.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PROJECT_LARA_API AWolf : public AAnimalBase
+class PROJECT_LARA_API ADeer : public AAnimalBase
 {
 	GENERATED_BODY()
 
 public:
-	AWolf();
+	ADeer();
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual void BeginPlay() override;
 

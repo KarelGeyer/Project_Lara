@@ -3,23 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animals/AnimalBase.h"
-#include "Wolf.generated.h"
+#include "Animals/AI/AnimalAIController.h"
+#include "DeerAIController.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PROJECT_LARA_API AWolf : public AAnimalBase
+class PROJECT_LARA_API ADeerAIController : public AAnimalAIController
 {
 	GENERATED_BODY()
 
 public:
-	AWolf();
+	ADeerAIController();
+
 protected:
 	virtual void BeginPlay() override;
-
-private:
-	/* Base Speed */
-	float Speed = 95.f;
 };

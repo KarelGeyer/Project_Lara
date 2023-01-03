@@ -36,7 +36,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
 	/* Movement Component */
 	UCharacterMovementComponent* MovementComponent;
 
@@ -44,8 +43,8 @@ protected:
 	virtual void SetMovementSpeed(float Speed);
 	/*Manages the animations*/
 	virtual void ManageAnim();
-
-private:
 	/*Sets the idle animation state*/
-	void SetIdleAnimationState();
+	virtual void SetIdleAnimationState();
+	/*Sets All the timers*/
+	virtual void SetTimers(int IdleStateChangeRate = 2.f);
 };
