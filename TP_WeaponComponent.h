@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TP_WeaponComponent.generated.h"
 
-class AProject_LaraCharacter;
+class APlayerCharacter;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECT_LARA_API UTP_WeaponComponent : public UActorComponent
@@ -14,10 +14,6 @@ class PROJECT_LARA_API UTP_WeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class AProject_LaraProjectile> ProjectileClass;
-
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USoundBase* FireSound;
@@ -26,16 +22,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		UAnimMontage* FireAnimation;
 
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		FVector MuzzleOffset;
-
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
 
 	/** Attaches the actor to a FirstPersonCharacter */
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void AttachWeapon(AProject_LaraCharacter* TargetCharacter);
+		void AttachWeapon(APlayerCharacter* TargetCharacter);
 
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -49,5 +41,5 @@ protected:
 
 private:
 	/** The Character holding this weapon*/
-	AProject_LaraCharacter* Character;
+	APlayerCharacter* Character;
 };

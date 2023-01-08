@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "Project_LaraGameMode.generated.h"
+#include "LaraGameMode.generated.h"
 
 UCLASS(minimalapi)
 class AProject_LaraGameMode : public AGameModeBase

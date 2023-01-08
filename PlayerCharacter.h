@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Project_LaraCharacter.generated.h"
+#include "PlayerCharacter.generated.h"
 
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -18,7 +18,7 @@ class USoundBase;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUseItem);
 
 UCLASS(config = Game)
-class AProject_LaraCharacter : public ACharacter
+class PROJECT_LARA_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -31,7 +31,7 @@ class AProject_LaraCharacter : public ACharacter
 		UCameraComponent* FirstPersonCameraComponent;
 
 public:
-	AProject_LaraCharacter();
+	APlayerCharacter();
 
 protected:
 	virtual void BeginPlay();
@@ -80,6 +80,10 @@ protected:
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData TouchItem;
 
+private:
+	/*Base health value of the player*/
+	float Health = 100.f;
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -96,8 +100,11 @@ protected:
 public:
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	/*Triggeres when the Player character is damaged by other pawns*/
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };
 

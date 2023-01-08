@@ -21,11 +21,6 @@ void AAnimalBase::Tick(float DeltaTime)
 	ManageAnim();
 }
 
-void AAnimalBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
 void AAnimalBase::SetMovementSpeed(float Speed)
 {
 	if (MovementComponent) {

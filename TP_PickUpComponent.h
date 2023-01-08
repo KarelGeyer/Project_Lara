@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
-#include "Project_LaraCharacter.h"
+#include "PlayerCharacter.h"
 #include "TP_PickUpComponent.generated.h"
 
 // Declaration of the delegate that will be called when someone picks this up
 // The character picking this up is the parameter sent with the notification
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AProject_LaraCharacter*, PickUpCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, APlayerCharacter*, PickUpCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECT_LARA_API UTP_PickUpComponent : public USphereComponent
@@ -17,10 +17,10 @@ class PROJECT_LARA_API UTP_PickUpComponent : public USphereComponent
 	GENERATED_BODY()
 
 public:
-	
+
 	/** Delegate to whom anyone can subscribe to receive this event */
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
-	FOnPickUp OnPickUp;
+		FOnPickUp OnPickUp;
 
 	UTP_PickUpComponent();
 protected:
@@ -30,5 +30,5 @@ protected:
 
 	/** Code for when something overlaps this component */
 	UFUNCTION()
-	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

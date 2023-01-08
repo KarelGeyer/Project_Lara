@@ -2,33 +2,82 @@
 
 
 #include "NPC/NPC_Base.h"
+#include <Kismet/GameplayStatics.h>
+#include <Project_Lara/PlayerCharacter.h>
+#include <Kismet/KismetMathLibrary.h>
+#include "GameFramework/CharacterMovementComponent.h"
 
-// Sets default values
 ANPC_Base::ANPC_Base()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
-// Called when the game starts or when spawned
 void ANPC_Base::BeginPlay()
 {
 	Super::BeginPlay();
-
+	InitialLocation = GetActorLocation();
 }
 
-// Called every frame
 void ANPC_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ManageRotation();
 }
 
-// Called to bind functionality to input
-void ANPC_Base::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+float ANPC_Base::GetDistanceFromPlayer()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	FVector NewPlayerLocation = PlayerPawn->GetActorLocation();
+	FVector Location = GetActorLocation();
 
+	return FVector::Dist(Location, NewPlayerLocation);
 }
 
+float ANPC_Base::GetDistanceFromLocation(ELocationType LocationType)
+{
+	if (LocationType == ELocationType::InitialLoc)
+	{
+		return FVector::Dist(GetActorLocation(), InitialLocation);
+	}
+
+	if (LocationType == ELocationType::PatrolLoc)
+	{
+		return FVector::Dist(GetActorLocation(), PatrolLocation);
+	}
+
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	FVector NewPlayerLocation = PlayerPawn->GetActorLocation();
+	FVector Location = GetActorLocation();
+
+	return FVector::Dist(Location, NewPlayerLocation);
+}
+
+bool ANPC_Base::IsMoving()
+{
+	FVector Velocity = GetVelocity();
+	double Movement = Velocity.SizeSquared();
+
+	return Movement > 0;
+}
+
+void ANPC_Base::SetMaxMovementSpeed(float Speed)
+{
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	if (MovementComponent) {
+		MovementComponent->MaxWalkSpeed = Speed;
+	}
+}
+
+void ANPC_Base::ManageRotation()
+{
+	if (IsMoving()) {
+		FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), GetActorLocation() + GetVelocity());
+		SetActorRotation(NewRotation);
+	}
+}
+
+void ANPC_Base::ManageAnimation()
+{
+}
