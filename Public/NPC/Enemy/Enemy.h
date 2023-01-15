@@ -45,16 +45,16 @@ public:
 		bool IsAttacking = false;
 
 	/* Distane at which the enemy will be attacking/chasing the player */
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-		float Health = 100.f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
+		float Health;
 
 	/* The range at which the enemy can shoot the player */
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 		float MaxShootingRange = 1000.f;
 
 	/* Damage to be applied on the Player or possibly other pawns */
-	UPROPERTY(BlueprintReadOnly, Category = "Attack")
-		float Damage = 10.f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+		float Damage;
 
 	/*Get Distance from player*/
 	UFUNCTION(Category = "State")

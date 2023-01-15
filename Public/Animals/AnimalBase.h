@@ -37,6 +37,12 @@ public:
 	/*return whether the pawn is currently moving*/
 	bool IsMoving();
 
+	/*Set patrol location*/
+	void SetPatrolLocation(FVector Location);
+
+	/* Get distance from player*/
+	float GetDistanceFromPlayer();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -54,4 +60,8 @@ protected:
 
 	/*Sets All the timers*/
 	virtual void SetTimers(int IdleStateChangeRate = 2.f);
+
+private:
+	/*Set the pawn to be visible only if player in range*/
+	void SetVisibility();
 };

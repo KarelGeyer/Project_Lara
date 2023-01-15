@@ -84,6 +84,10 @@ private:
 	/*Base health value of the player*/
 	float Health = 100.f;
 
+	/*Base stamina value of the player*/
+	float Stamina = 100.f;
+
+	/**/
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

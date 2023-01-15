@@ -25,7 +25,7 @@ void AEnemyAIController::BeginPlay()
 	Super::BeginPlay();
 	GetBasePawn();
 
-	GetWorld()->GetTimerManager().SetTimer(PatrolTimerHandle, this, &AEnemyAIController::SetPatrolDirection, 15.f, true);
+	GetWorld()->GetTimerManager().SetTimer(PatrolTimerHandle, this, &AEnemyAIController::SetPatrolDirection, FMath::RandRange(15, 35), true);
 }
 
 void AEnemyAIController::GetBasePawn()
@@ -36,8 +36,10 @@ void AEnemyAIController::GetBasePawn()
 void AEnemyAIController::ManageChasePlayer()
 {
 	if (EnemyCharacter == nullptr) {
+		GetBasePawn();
 		return;
 	}
+
 
 	if (LineOfSightTo(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)) && EnemyCharacter->GetDistanceFromPlayer() < EnemyCharacter->ChaseDistance)
 	{
@@ -67,6 +69,7 @@ void AEnemyAIController::ManageChasePlayer()
 void AEnemyAIController::ManagePatrol()
 {
 	if (EnemyCharacter == nullptr) {
+		GetBasePawn();
 		return;
 	}
 

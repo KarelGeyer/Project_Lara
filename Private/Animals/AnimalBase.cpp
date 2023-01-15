@@ -1,5 +1,6 @@
 #include "Animals/AnimalBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 AAnimalBase::AAnimalBase()
 {
@@ -19,6 +20,7 @@ void AAnimalBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	ManageAnim();
+	SetVisibility();
 }
 
 void AAnimalBase::SetMovementSpeed(float Speed)
@@ -50,10 +52,34 @@ void AAnimalBase::SetTimers(int IdleStateChangeRate)
 	GetWorld()->GetTimerManager().SetTimer(IdleTimerHandle, this, &AAnimalBase::SetIdleAnimationState, IdleStateChangeRate, true);
 }
 
+void AAnimalBase::SetVisibility()
+{
+	if (GetDistanceFromPlayer() > 10000.f) {
+		RootComponent->GetChildComponent(1)->SetVisibility(false);
+	}
+	else {
+		RootComponent->GetChildComponent(1)->SetVisibility(true);
+	}
+}
+
 bool AAnimalBase::IsMoving()
 {
 	FVector Velocity = GetVelocity();
 	double Movement = Velocity.SizeSquared();
 
 	return Movement > 0;
+}
+
+void AAnimalBase::SetPatrolLocation(FVector Location)
+{
+	PatrolLocation = Location;
+}
+
+float AAnimalBase::GetDistanceFromPlayer()
+{
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	FVector NewPlayerLocation = PlayerPawn->GetActorLocation();
+	FVector Location = GetActorLocation();
+
+	return FVector::Dist(Location, NewPlayerLocation);
 }

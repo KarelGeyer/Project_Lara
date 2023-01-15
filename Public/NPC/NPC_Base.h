@@ -59,6 +59,10 @@ public:
 	UFUNCTION(Category = "Movement")
 		void SetMaxMovementSpeed(float Speed);
 
+	/*Sets Maximum movement speed*/
+	UFUNCTION(Category = "Movement")
+		void SetPatrolLocation(FVector Location);
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -6,14 +6,20 @@
 #include "DrawDebugHelpers.h"
 
 AEnemy::AEnemy()
-{
-}
+{}
 
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	ManageAnimation();
+
+	if (GetDistanceFromPlayer() < 5000) {
+
+	}
+	else {
+		RootComponent->bHiddenInGame = true;
+	}
 }
 
 void AEnemy::BeginPlay()
@@ -62,6 +68,7 @@ void AEnemy::SetStateValues(float AnimSpeed, float AnimState, bool bIsAttacking,
 
 void AEnemy::ManagePatrol()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("Patrol"));
 	if (IsMoving()) {
 		SetStateValues(0.5, 0);
 		SetMaxMovementSpeed(MaxWalkSpeed);
@@ -80,6 +87,7 @@ void AEnemy::ManagePatrol()
 
 void AEnemy::ManageChase()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("Chase"));
 	SetStateValues(1.f);
 	SetMaxMovementSpeed(MaxRunSpeed);
 
@@ -92,6 +100,7 @@ void AEnemy::ManageChase()
 
 void AEnemy::ManageAttack()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 	SetStateValues(0.f, 1.f, true);
 
 	if (GetWorld()->GetTimerManager().IsTimerPaused(ShootTimerHandle)) {
@@ -130,9 +139,9 @@ void AEnemy::Shoot()
 	CollisionParams.AddIgnoredActor(this);
 	CollisionParams.AddIgnoredActor(GetOwner());
 
-	FVector FinalLocation = FVector(Location.X, Location.Y, Location.Z);
+	FVector RandomizedLocation = FVector(Location.X, Location.Y + FMath::RandRange(0, 30), Location.Z + FMath::RandRange(0, 30));
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECC_Visibility, CollisionParams);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, RandomizedLocation, End, ECC_Visibility, CollisionParams);
 
 	if (bHit)
 	{

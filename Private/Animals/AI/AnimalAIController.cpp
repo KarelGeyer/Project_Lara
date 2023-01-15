@@ -16,6 +16,8 @@ AAnimalAIController::AAnimalAIController()
 void AAnimalAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	InitializeAI();
+
 }
 
 void AAnimalAIController::BeginPlay()
@@ -23,20 +25,23 @@ void AAnimalAIController::BeginPlay()
 	Super::BeginPlay();
 
 	GetBasePawn();
-	InitializeAI();
 }
 
 void AAnimalAIController::InitializeAI()
 {
-	if (AIBehavior) {
-		RunBehaviorTree(AIBehavior);
+	if (Animal && Animal->GetDistanceFromPlayer() < 10000.f) {
+		if (AIBehavior) {
 
-		if (Animal) {
+			RunBehaviorTree(AIBehavior);
+
 			GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolLocation"), Animal->PatrolLocation);
 			GetBlackboardComponent()->SetValueAsVector(TEXT("InitialPosition"), Animal->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsInt(TEXT("State"), Animal->BaseState);
 		}
+	}
 
+	if (Animal && Animal->GetDistanceFromPlayer() > 10000.f) {
+		StopMovement();
 	}
 }
 

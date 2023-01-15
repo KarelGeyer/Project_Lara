@@ -81,3 +81,8 @@ void ANPC_Base::ManageRotation()
 void ANPC_Base::ManageAnimation()
 {
 }
+
+void ANPC_Base::SetPatrolLocation(FVector Location)
+{
+	PatrolLocation = Location;
+}
