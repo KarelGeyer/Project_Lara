@@ -1,5 +1,63 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "NPC/Characters/NPC_Character.h"
+#include "Components/BoxComponent.h"
+#include "Components/WidgetComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include "Components/TextBlock.h"
 
+ANPC_Character::ANPC_Character()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	CreateAttachments();
+}
+
+void ANPC_Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void ANPC_Character::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ANPC_Character::CreateAttachments()
+{
+	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractionWidget"));
+	if (InteractionWidget) {
+		InteractionWidget->SetupAttachment(RootComponent);
+		InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
+		InteractionWidget->SetVisibility(false);
+	}
+
+	DialogWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("DialogWidget"));
+	if (DialogWidget) {
+		DialogWidget->SetupAttachment(RootComponent);
+		DialogWidget->SetWidgetSpace(EWidgetSpace::Screen);
+		DialogWidget->SetVisibility(false);
+	}
+}
+
+void ANPC_Character::OnInteractZoneEnter()
+{
+	InteractionWidget->SetVisibility(true);
+}
+
+void ANPC_Character::OnInteractZoneLeave()
+{
+	if (InteractionWidget->IsVisible()) {
+		InteractionWidget->SetVisibility(false);
+	}
+
+	if (DialogWidget->IsVisible()) {
+		DialogWidget->SetVisibility(false);
+	}
+}
+
+void ANPC_Character::OnInteract()
+{
+	if (DialogWidget) {
+		DialogWidget->SetVisibility(true);
+		InteractionWidget->SetVisibility(false);
+	}
+}

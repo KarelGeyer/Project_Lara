@@ -54,12 +54,7 @@ void AAnimalBase::SetTimers(int IdleStateChangeRate)
 
 void AAnimalBase::SetVisibility()
 {
-	if (GetDistanceFromPlayer() > 10000.f) {
-		RootComponent->GetChildComponent(1)->SetVisibility(false);
-	}
-	else {
-		RootComponent->GetChildComponent(1)->SetVisibility(true);
-	}
+	RootComponent->GetChildComponent(1)->SetVisibility(GetDistanceFromPlayer() > 10000.f);
 }
 
 bool AAnimalBase::IsMoving()

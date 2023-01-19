@@ -7,11 +7,15 @@
 #include "NPC_CharacterAIController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class PROJECT_LARA_API ANPC_CharacterAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
+public:
+	ANPC_CharacterAIController();
+
+	virtual void Tick(float DeltaTime) override;
 };

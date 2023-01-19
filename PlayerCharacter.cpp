@@ -6,6 +6,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
+#include "Components/BoxComponent.h"
+#include "Interfaces/Interaction.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -34,13 +36,18 @@ APlayerCharacter::APlayerCharacter()
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
 
+	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractionBox"));
+	InteractionBox->SetupAttachment(RootComponent);
+	InteractionBox->SetCollisionProfileName(FName("OverlapAllDynamic"), true);
+	InteractionBox->SetGenerateOverlapEvents(true);
 }
 
 void APlayerCharacter::BeginPlay()
 {
-	// Call the base class
 	Super::BeginPlay();
 
+	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnInteractionBoxOverlapBegin);
+	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnInteractionBoxOverlapEnd);
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -53,6 +60,9 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	// Bind Interaction event
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &APlayerCharacter::Interact);
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &APlayerCharacter::OnPrimaryAction);
@@ -157,4 +167,34 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
 	return 0.f;
+}
+
+void APlayerCharacter::Interact()
+{
+	if (bCanInteract && Interactable != nullptr)
+	{
+		Interactable->OnInteract();
+	}
+}
+
+void APlayerCharacter::OnInteractionBoxOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Interactable = Cast<IInteraction>(OtherActor);
+
+	if (Interactable != nullptr)
+	{
+		Interactable->OnInteractZoneEnter();
+		bCanInteract = true;
+	}
+}
+
+void APlayerCharacter::OnInteractionBoxOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	Interactable = Cast<IInteraction>(OtherActor);
+
+	if (Interactable != nullptr)
+	{
+		Interactable->OnInteractZoneLeave();
+		bCanInteract = false;
+	}
 }

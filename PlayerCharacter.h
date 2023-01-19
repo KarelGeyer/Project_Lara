@@ -12,6 +12,8 @@ class USceneComponent;
 class UCameraComponent;
 class UAnimMontage;
 class USoundBase;
+class UBoxComponent;
+class IInteraction;
 
 // Declaration of the delegate that will be called when the Primary Action is triggered
 // It is declared as dynamic so it can be accessed also in Blueprints
@@ -44,6 +46,11 @@ public:
 	/** Delegate to whom anyone can subscribe to receive this event */
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 		FOnUseItem OnUseItem;
+
+	/* An interaction box*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		UBoxComponent* InteractionBox;
+
 protected:
 
 	/** Fires a projectile. */
@@ -87,7 +94,20 @@ private:
 	/*Base stamina value of the player*/
 	float Stamina = 100.f;
 
-	/**/
+	/* Represents wheter player is in interaction box*/
+	bool bCanInteract = false;
+
+	/* An Actor to interact with*/
+	IInteraction* Interactable;
+
+	// Trigger when player enters the interaction box
+	UFUNCTION()
+		void OnInteractionBoxOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	// Trigger when player leaves the interaction box
+	UFUNCTION()
+		void OnInteractionBoxOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -107,6 +127,9 @@ public:
 
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	/* Interaction Handler*/
+	void Interact();
 
 	/*Triggeres when the Player character is damaged by other pawns*/
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
