@@ -31,12 +31,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UWidgetComponent* DialogWidget;
 
+	/* Dialog Text array*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialog")
+		TArray<FString> DialogText;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
+	// Represents a dialoge state
+	int32 DialogState = 0;
+
 	// Create Attachments
 	void CreateAttachments();
+
+	// Set Dialogue Text
+	void SetDialogueText(FString Text);
 
 	// On enter interaction zone
 	virtual void OnInteractZoneEnter() override;

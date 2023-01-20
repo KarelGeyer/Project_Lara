@@ -6,6 +6,8 @@
 #include "NPC/NPC_Base.h"
 #include "Enemy.generated.h"
 
+class UWidgetComponent;
+
 /* A set of states the enemy can be in*/
 UENUM(Category = "State")
 enum EEnemyState {
@@ -59,6 +61,10 @@ public:
 	/*Get Distance from player*/
 	UFUNCTION(Category = "State")
 		void SetEnemyState(EEnemyState State);
+
+	/* An interaction Widget component*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		UWidgetComponent* HealthBarWidget;
 
 protected:
 	virtual void BeginPlay() override;

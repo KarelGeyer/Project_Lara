@@ -3,16 +3,30 @@
 
 #include "NPC/Enemy/Enemy.h"
 #include <Kismet/GameplayStatics.h>
+#include "Components/WidgetComponent.h"
+#include "Components/ProgressBar.h"
 #include "DrawDebugHelpers.h"
 
 AEnemy::AEnemy()
-{}
+{
+	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
+	HealthBarWidget->SetupAttachment(RootComponent);
+	HealthBarWidget->SetWidgetSpace(EWidgetSpace::World);
+}
 
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	ManageAnimation();
+
+	if (HealthBarWidget) {
+		UProgressBar* HealthBar = Cast<UProgressBar>(HealthBarWidget->GetUserWidgetObject()->GetWidgetFromName("HealthBar"));
+		if (HealthBar) {
+			UE_LOG(LogTemp, Warning, TEXT("HealthBar: %s"), *HealthBar->GetName());
+			HealthBar->SetPercent(.5f);
+		}
+	}
 }
 
 void AEnemy::BeginPlay()

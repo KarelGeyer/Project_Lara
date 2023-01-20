@@ -38,6 +38,14 @@ void ANPC_Character::CreateAttachments()
 	}
 }
 
+void ANPC_Character::SetDialogueText(FString Text)
+{
+	UTextBlock* TextBlock = Cast<UTextBlock>(DialogWidget->GetUserWidgetObject()->GetWidgetFromName("Dialog"));
+	if (TextBlock) {
+		TextBlock->SetText(FText::FromString(Text));
+	}
+}
+
 void ANPC_Character::OnInteractZoneEnter()
 {
 	InteractionWidget->SetVisibility(true);
@@ -52,12 +60,29 @@ void ANPC_Character::OnInteractZoneLeave()
 	if (DialogWidget->IsVisible()) {
 		DialogWidget->SetVisibility(false);
 	}
+
+	DialogState = 0;
 }
 
 void ANPC_Character::OnInteract()
 {
-	if (DialogWidget) {
+	if (DialogWidget == nullptr) {
+		return;
+	}
+
+	if (DialogText.IsValidIndex(DialogState)) {
 		DialogWidget->SetVisibility(true);
-		InteractionWidget->SetVisibility(false);
+
+		SetDialogueText(DialogText[DialogState]);
+		DialogState++;
+
+		if (InteractionWidget->IsVisible()) {
+			InteractionWidget->SetVisibility(false);
+		}
+	}
+	else {
+		DialogWidget->SetVisibility(false);
+		InteractionWidget->SetVisibility(true);
+		DialogState = 0;
 	}
 }
