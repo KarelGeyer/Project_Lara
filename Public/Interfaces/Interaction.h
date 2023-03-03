@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "Interaction.generated.h"
 
+class UWidgetComponent;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UInteraction : public UInterface
@@ -19,7 +21,6 @@ class PROJECT_LARA_API IInteraction
 
 		// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-
 	// Runs when Actor enters the player's interaction zone
 	virtual void OnInteractZoneEnter();
 

@@ -14,10 +14,18 @@ class UAnimMontage;
 class USoundBase;
 class UBoxComponent;
 class IInteraction;
+class IPickableItem;
 
 // Declaration of the delegate that will be called when the Primary Action is triggered
 // It is declared as dynamic so it can be accessed also in Blueprints
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUseItem);
+
+UENUM(Category = "Stats")
+enum class EStatsType
+{
+	Health,
+	Stamina
+};
 
 UCLASS(config = Game)
 class PROJECT_LARA_API APlayerCharacter : public ACharacter
@@ -50,6 +58,14 @@ public:
 	/* An interaction box*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UBoxComponent* InteractionBox;
+
+	/*Player HUD Widget class*/
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> PlayerHUDClass;
+
+	/* Health and Stamina setter*/
+	UFUNCTION()
+		void SetStats(EStatsType StatsType, float Value);
 
 protected:
 
@@ -100,6 +116,12 @@ private:
 	/* An Actor to interact with*/
 	IInteraction* Interactable;
 
+	/*Player HUD Widget*/
+	UUserWidget* PlayerHUD;
+
+	/* List of pickedup Items*/
+	TArray<IPickableItem*> PickedUpItems;
+
 	// Trigger when player enters the interaction box
 	UFUNCTION()
 		void OnInteractionBoxOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -130,6 +152,18 @@ public:
 
 	/* Interaction Handler*/
 	void Interact();
+
+	/* Add item to Inventory*/
+	void AddItemToInventory(IPickableItem* Item);
+
+	/* Remove Item found by name from Inventory*/
+	void RemoveItemFromInventory(IPickableItem* Item);
+
+	/* Remove Item found by name from Inventory*/
+	void RemoveItemFromInventory(FString ItemName);
+
+	/* Find item in inventory*/
+	bool FindItemInInventory(FString ItemName);
 
 	/*Triggeres when the Player character is damaged by other pawns*/
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;

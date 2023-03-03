@@ -2,8 +2,7 @@
 
 
 #include "Interfaces/Interaction.h"
-
-// Add default functionality here for any IInteraction functions that are not pure virtual.
+#include "Components/WidgetComponent.h"
 
 void IInteraction::OnInteractZoneEnter()
 {

@@ -7,7 +7,10 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "Components/BoxComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/ProgressBar.h"
 #include "Interfaces/Interaction.h"
+#include "Interfaces/PickableItem.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,6 +51,11 @@ void APlayerCharacter::BeginPlay()
 
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnInteractionBoxOverlapBegin);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnInteractionBoxOverlapEnd);
+
+	if (PlayerHUDClass) {
+		PlayerHUD = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		PlayerHUD->AddToViewport();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -160,11 +168,9 @@ bool APlayerCharacter::EnableTouchscreenMovement(class UInputComponent* PlayerIn
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	DamageToApply = FMath::Min(Health, DamageToApply);
-	Health -= DamageToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	SetStats(EStatsType::Health, Health - DamageToApply);
 
 	return 0.f;
 }
@@ -174,6 +180,61 @@ void APlayerCharacter::Interact()
 	if (bCanInteract && Interactable != nullptr)
 	{
 		Interactable->OnInteract();
+	}
+}
+
+void APlayerCharacter::AddItemToInventory(IPickableItem* Item)
+{
+	PickedUpItems.Add(Item);
+}
+
+void APlayerCharacter::RemoveItemFromInventory(IPickableItem* Item)
+{
+	PickedUpItems.Remove(Item);
+}
+
+void APlayerCharacter::RemoveItemFromInventory(FString ItemName)
+{
+	for (int i = 0; i < PickedUpItems.Num(); i++)
+	{
+		if (PickedUpItems[i]->GetItemName() == ItemName)
+		{
+			PickedUpItems.RemoveAt(i);
+			return;
+		}
+	}
+}
+
+bool APlayerCharacter::FindItemInInventory(FString ItemName)
+{
+	for (IPickableItem* Item : PickedUpItems)
+	{
+		return Item->GetItemName() == ItemName;
+	}
+
+	return false;
+}
+
+void APlayerCharacter::SetStats(EStatsType StatsType, float Value)
+{
+	if (PlayerHUD == nullptr)
+	{
+		return;
+	}
+
+	if (StatsType == EStatsType::Health)
+	{
+		UProgressBar* HealthBar = Cast<UProgressBar>(PlayerHUD->GetWidgetFromName("Health_Bar"));
+		if (HealthBar)
+		{
+			HealthBar->SetPercent(Health / 100);
+			Health = Value;
+		}
+	}
+
+	if (StatsType == EStatsType::Stamina)
+	{
+		Stamina = Value;
 	}
 }
 

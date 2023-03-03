@@ -20,13 +20,6 @@ void AEnemy::Tick(float DeltaTime)
 
 	ManageAnimation();
 
-	if (HealthBarWidget) {
-		UProgressBar* HealthBar = Cast<UProgressBar>(HealthBarWidget->GetUserWidgetObject()->GetWidgetFromName("HealthBar"));
-		if (HealthBar) {
-			UE_LOG(LogTemp, Warning, TEXT("HealthBar: %s"), *HealthBar->GetName());
-			HealthBar->SetPercent(.5f);
-		}
-	}
 }
 
 void AEnemy::BeginPlay()
